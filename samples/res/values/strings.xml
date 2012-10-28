@@ -1,0 +1,12 @@
+<resources>
+
+    <string name="app_name">AndroidImageLoader-Samples</string>
+    <string name="clear_cache">Clear Cache</string>
+    <string name="refresh">Refresh</string>
+    <string name="retry">Retry</string>
+    <string name="debug_stats">Memory cache stats:</string>
+    <string name="error_occured">Error occured</string>
+    <string name="loading">Loading</string>
+    <string name="empty">Nothing to show</string>
+
+</resources>
