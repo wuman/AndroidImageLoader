@@ -1,6 +1,8 @@
 AndroidImageLoader
 ==================
 
+![Feature Image](https://raw.github.com/wuman/AndroidImageLoader/master/library/src/site/static/feature.png)
+
 AndroidImageLoader is a fork of the 
 [Image Loader](http://code.google.com/p/libs-for-android/wiki/ImageLoader) 
 component in [libs-for-android](http://code.google.com/p/libs-for-android/).
