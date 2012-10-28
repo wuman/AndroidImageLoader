@@ -144,7 +144,7 @@ There are two ways to include AndroidImageLoader in your projects:
         <dependency>
             <groupId>com.wu-man</groupId>
             <artifactId>androidimageloader-library</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <version>0.1</version>
         </dependency>
 
 
