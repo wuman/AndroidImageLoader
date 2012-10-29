@@ -1,59 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.wuman.androidimageloader.samples"
-    android:versionCode="1"
-    android:versionName="0.1-SNAPSHOT" >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="020" android:versionName="0.2-SNAPSHOT" package="com.wuman.androidimageloader.samples">
 
-    <uses-sdk
-        android:minSdkVersion="7"
-        android:targetSdkVersion="16" />
+    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="16"/>
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
-    <application
-        android:name=".SamplesApplication"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name" >
-        <activity
-            android:name=".SamplesActivity"
-            android:label="@string/app_name" >
+    <application android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:name=".SamplesApplication">
+        <activity android:label="@string/app_name" android:name=".SamplesActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ImageViewBindingActivity"
-            android:label="ImageViewBinding" >
+        <activity android:label="ImageViewBinding" android:name=".ImageViewBindingActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="com.wuman.androidimageloader.samples.EXAMPLE" />
+                <category android:name="com.wuman.androidimageloader.samples.EXAMPLE"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".CustomViewBindingActivity"
-            android:label="CustomViewBinding" >
+        <activity android:label="CustomViewBinding" android:name=".CustomViewBindingActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="com.wuman.androidimageloader.samples.EXAMPLE" />
+                <category android:name="com.wuman.androidimageloader.samples.EXAMPLE"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".FlickrInterestingnessActivity"
-            android:label="FlickrInterestingness" >
+        <activity android:label="FlickrInterestingness" android:name=".FlickrInterestingnessActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="com.wuman.androidimageloader.samples.EXAMPLE" />
+                <category android:name="com.wuman.androidimageloader.samples.EXAMPLE"/>
             </intent-filter>
         </activity>
 
-        <provider
-            android:name=".provider.SamplesProvider"
-            android:authorities="com.wuman.androidimageloader.samples.provider" />
+        <provider android:authorities="com.wuman.androidimageloader.samples.provider" android:name=".provider.SamplesProvider"/>
     </application>
 
 </manifest>

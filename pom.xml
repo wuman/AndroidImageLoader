@@ -187,8 +187,27 @@
                             <platform>${android.platform}</platform>
                         </sdk>
                         <undeployBeforeDeploy>true</undeployBeforeDeploy>
+                        <manifest>
+                            <versionCodeUpdateFromVersion>true</versionCodeUpdateFromVersion>
+                        </manifest>
                     </configuration>
                     <extensions>true</extensions>
+                    <executions>
+                        <execution>
+                            <id>manifest-update</id>
+                            <phase>process-resources</phase>
+                            <goals>
+                                <goal>manifest-update</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>align-apk</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>zipalign</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
