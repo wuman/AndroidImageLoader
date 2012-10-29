@@ -43,7 +43,7 @@ The AndroidImageLoader improves libs-for-android in the following ways:
 USAGE
 -----
 
-The ImageLoader should be installed as a pseudo-system service. This is so that
+The `ImageLoader` should be installed as a pseudo-system service. This is so that
 it can be used as a singleton and accessed across Activities. You do this by
 declaring a customized `Application` in the `AndroidManifest.xml`:
 
@@ -99,6 +99,10 @@ An example of creating the `ImageLoader` instance can be:
             ImageLoader.DEFAULT_CACHE_SIZE, 
             new File(context.getCacheDir(), "images"));        
     }
+
+Obtaining the `ImageLoader` from within an `Activity` is easy:
+
+    ImageLoader imageLoader = ImageLoader.get(context);
 
 Binding an image to `ImageView` is done via `ImageViewBinder`:
 
