@@ -80,7 +80,8 @@ An example of creating the `ImageLoader` instance can be:
             throws IOException {
         ContentHandler prefetchHandler = null;
         try {
-            HttpResponseCache.install(new File(context.getCacheDir(), "HttpCache"),
+            HttpResponseCache.install(
+                    new File(context.getCacheDir(), "HttpCache"),
                     ImageLoader.DEFAULT_CACHE_SIZE * 2);
             prefetchHandler = new SinkContentHandler();
         } catch (Exception e) {
@@ -93,8 +94,10 @@ An example of creating the `ImageLoader` instance can be:
         ContentHandler bitmapHandler = new BitmapContentHandler();
         bitmapHandler.setTimeout(5000);
         
-        return new ImageLoader(streamFactory, bitmapHandler, prefetchHandler,
-            ImageLoader.DEFAULT_CACHE_SIZE, new File(context.getCacheDir(), "images"));        
+        return new ImageLoader(
+            streamFactory, bitmapHandler, prefetchHandler,
+            ImageLoader.DEFAULT_CACHE_SIZE, 
+            new File(context.getCacheDir(), "images"));        
     }
 
 Binding an image to `ImageView` is done via `ImageViewBinder`:
