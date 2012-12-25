@@ -187,9 +187,6 @@
                             <platform>${android.platform}</platform>
                         </sdk>
                         <undeployBeforeDeploy>true</undeployBeforeDeploy>
-                        <sign>
-                            <debug>false</debug>
-                        </sign>
                         <manifest>
                             <versionCodeUpdateFromVersion>true</versionCodeUpdateFromVersion>
                         </manifest>
