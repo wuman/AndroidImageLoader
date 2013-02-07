@@ -4,8 +4,9 @@ notifications:
   email: false
 
 before_install:
-  - wget http://dl.google.com/android/android-sdk_r20.0.3-linux.tgz
-  - tar -zxf android-sdk_r20.0.3-linux.tgz
+  - if [ `uname -m` = x86_64 ]; then sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch; fi
+  - wget -nv http://dl.google.com/android/android-sdk_r21.0.1-linux.tgz
+  - tar zxvf android-sdk_r21.0.1-linux.tgz
   - export ANDROID_HOME=${PWD}/android-sdk-linux
   - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
   - android list sdk
