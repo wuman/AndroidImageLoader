@@ -26,7 +26,10 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLStreamHandler;
 import java.net.URLStreamHandlerFactory;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 
@@ -217,6 +220,12 @@ public final class ImageLoader {
      * Recent errors encountered when loading bitmaps.
      */
     private final LruCache<String, ImageError> mErrors;
+
+	/**
+	 * Allow only single concurrent request to given url. A list of callbacks for concurrent request attempts
+	 * is created and they are called when the initial ImageRequest is ready.
+	 */
+	private final Map<String, List<Callback>> concurrentRequests = new HashMap<String, List<Callback>>();
 
     /**
      * Creates an {@link ImageLoader}.
@@ -448,12 +457,39 @@ public final class ImageLoader {
                 }
                 return LoadResult.ERROR;
             } else {
-                ImageRequest request = new ImageRequest(url, callback);
-                enqueueRequest(request);
+	            synchronized (concurrentRequests) {
+		            List<Callback> callbacks = concurrentRequests.get(url);
+		            if (callbacks == null) {
+			            callbacks = new ArrayList<Callback>();
+			            concurrentRequests.put(url, callbacks);
+		            }
+
+		            // Add dummy callback;
+		            if (callback == null) {
+			            callback = new Callback() {
+				            @Override
+				            public void onImageLoaded(Bitmap bitmap, String url, LoadSource loadSource) {
+				            }
+
+				            @Override
+				            public void onImageError(String url, Throwable error) {
+				            }
+			            };
+		            }
+		            callbacks.add(callback);
+
+		            // Only initial request should be enqueued.
+		            if (callbacks.size() == 1) {
+			            ImageRequest request = new ImageRequest(url);
+			            enqueueRequest(request);
+		            }
+	            }
+
                 return LoadResult.LOADING;
             }
         }
     }
+
 
     /**
      * Loads an image at the given URL only if it already exists in the cache.
@@ -732,8 +768,6 @@ public final class ImageLoader {
 
     private class ImageRequest {
 
-        private final Callback mCallback;
-
         private final String mUrl;
 
         private final boolean mLoadBitmap;
@@ -744,9 +778,11 @@ public final class ImageLoader {
 
         private LoadSource mLoadSource;
 
-        private ImageRequest(String url, Callback callback, boolean loadBitmap) {
+	    /**
+	     * Creates an {@link ImageTask} to prime the cache.
+	     */
+        private ImageRequest(String url, boolean loadBitmap) {
             mUrl = url;
-            mCallback = callback;
             mLoadBitmap = loadBitmap;
             mLoadSource = LoadSource.EXTERNAL;
         }
@@ -755,15 +791,8 @@ public final class ImageLoader {
          * Creates an {@link ImageTask} to load a {@link Bitmap} for an
          * {@link ImageView}.
          */
-        public ImageRequest(String url, Callback callback) {
-            this(url, callback, true);
-        }
-
-        /**
-         * Creates an {@link ImageTask} to prime the cache.
-         */
-        public ImageRequest(String url, boolean loadBitmap) {
-            this(url, null, loadBitmap);
+        public ImageRequest(String url) {
+            this(url, true);
         }
 
         private Bitmap loadImage(URL url) throws IOException {
@@ -859,13 +888,21 @@ public final class ImageLoader {
             } else if (mError != null && !hasError(mUrl)) {
                 putError(mUrl, mError);
             }
-            if (mCallback != null) {
-                if (mBitmap != null) {
-                    mCallback.onImageLoaded(mBitmap, mUrl, mLoadSource);
-                } else if (mError != null) {
-                    mCallback.onImageError(mUrl, mError.getCause());
-                }
-            }
+
+	        List<Callback> callbacks;
+	        synchronized (concurrentRequests) {
+		        callbacks = concurrentRequests.remove(mUrl);
+	        }
+
+	        if (callbacks != null) {
+		        for (Callback callback : callbacks) {
+			        if (mBitmap != null) {
+				        callback.onImageLoaded(mBitmap, mUrl, mLoadSource);
+			        } else if (mError != null) {
+				        callback.onImageError(mUrl, mError.getCause());
+			        }
+		        }
+	        }
         }
 
         public void writeBackResult() {
