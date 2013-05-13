@@ -221,11 +221,11 @@ public final class ImageLoader {
      */
     private final LruCache<String, ImageError> mErrors;
 
-	/**
-	 * Allow only single concurrent request to given url. A list of callbacks for concurrent request attempts
-	 * is created and they are called when the initial ImageRequest is ready.
-	 */
-	private final Map<String, List<Callback>> concurrentRequests = new HashMap<String, List<Callback>>();
+    /**
+     * Allow only single concurrent request to given url. A list of callbacks for concurrent request attempts
+     * is created and they are called when the initial ImageRequest is ready.
+     */
+    private final Map<String, List<Callback>> concurrentRequests = new HashMap<String, List<Callback>>();
 
     /**
      * Creates an {@link ImageLoader}.
@@ -457,33 +457,33 @@ public final class ImageLoader {
                 }
                 return LoadResult.ERROR;
             } else {
-	            synchronized (concurrentRequests) {
-		            List<Callback> callbacks = concurrentRequests.get(url);
-		            if (callbacks == null) {
-			            callbacks = new ArrayList<Callback>();
-			            concurrentRequests.put(url, callbacks);
-		            }
+                synchronized (concurrentRequests) {
+                    List<Callback> callbacks = concurrentRequests.get(url);
+                    if (callbacks == null) {
+                        callbacks = new ArrayList<Callback>();
+                        concurrentRequests.put(url, callbacks);
+                    }
 
-		            // Add dummy callback;
-		            if (callback == null) {
-			            callback = new Callback() {
-				            @Override
-				            public void onImageLoaded(Bitmap bitmap, String url, LoadSource loadSource) {
-				            }
-
-				            @Override
-				            public void onImageError(String url, Throwable error) {
-				            }
-			            };
-		            }
-		            callbacks.add(callback);
-
-		            // Only initial request should be enqueued.
-		            if (callbacks.size() == 1) {
-			            ImageRequest request = new ImageRequest(url);
-			            enqueueRequest(request);
-		            }
-	            }
+                    // Add dummy callback;
+                    if (callback == null) {
+                        callback = new Callback() {
+                            @Override
+                            public void onImageLoaded(Bitmap bitmap, String url, LoadSource loadSource) {
+                            }
+                            
+                            @Override
+                            public void onImageError(String url, Throwable error) {
+                            }
+                        };
+                    }
+                    callbacks.add(callback);
+                    
+                    // Only initial request should be enqueued.
+                    if (callbacks.size() == 1) {
+                        ImageRequest request = new ImageRequest(url);
+                        enqueueRequest(request);
+                    }
+                }
 
                 return LoadResult.LOADING;
             }
@@ -889,20 +889,20 @@ public final class ImageLoader {
                 putError(mUrl, mError);
             }
 
-	        List<Callback> callbacks;
-	        synchronized (concurrentRequests) {
-		        callbacks = concurrentRequests.remove(mUrl);
-	        }
+            List<Callback> callbacks;
+            synchronized (concurrentRequests) {
+                callbacks = concurrentRequests.remove(mUrl);
+            }
 
-	        if (callbacks != null) {
-		        for (Callback callback : callbacks) {
-			        if (mBitmap != null) {
-				        callback.onImageLoaded(mBitmap, mUrl, mLoadSource);
-			        } else if (mError != null) {
-				        callback.onImageError(mUrl, mError.getCause());
-			        }
-		        }
-	        }
+            if (callbacks != null) {
+                for (Callback callback : callbacks) {
+                    if (mBitmap != null) {
+                        callback.onImageLoaded(mBitmap, mUrl, mLoadSource);
+                    } else if (mError != null) {
+                        callback.onImageError(mUrl, mError.getCause());
+                    }
+                }
+            }
         }
 
         public void writeBackResult() {
