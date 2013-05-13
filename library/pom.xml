@@ -18,10 +18,6 @@
             <artifactId>disklrucache</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.nineoldandroids</groupId>
-            <artifactId>library</artifactId>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>

@@ -1,14 +1,14 @@
 package com.wuman.androidimageloader;
 
+import android.animation.ObjectAnimator;
 import android.graphics.Bitmap;
+import android.os.Build;
+import android.view.ViewPropertyAnimator;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
-
-import com.nineoldandroids.animation.ObjectAnimator;
-import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.wuman.androidimageloader.ImageLoader.LoadResult;
 import com.wuman.androidimageloader.ImageLoader.LoadSource;
 
@@ -35,7 +35,7 @@ public class ImageViewBinder extends AbstractViewBinder<ImageView> implements
     @Override
     public void unbind(ImageView view) {
         super.unbind(view);
-        ViewPropertyAnimator.animate(view).cancel();
+        // ViewPropertyAnimator.animate(view).cancel();
         view.setImageDrawable(null);
     }
 
@@ -67,7 +67,8 @@ public class ImageViewBinder extends AbstractViewBinder<ImageView> implements
     protected void onImageLoaded(ImageView view, Bitmap bitmap, String url,
             LoadSource loadSource) {
         view.setImageBitmap(bitmap);
-        if (loadSource != LoadSource.CACHE_MEMORY && mFadeIn) {
+
+        if (loadSource != LoadSource.CACHE_MEMORY && mFadeIn && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             ObjectAnimator.ofFloat(view, "alpha", 0.0f, 1.0f).setDuration(400)
                     .start();
         }
